@@ -76,7 +76,7 @@ def webhook():
         try:
             rate = get_current_euro_rate()
             if rate:
-                msg = f"💶 <b>Tỉ giá EUR hiện tại</b>\nGiá mua: <b>{rate:,.0f} VND</b>\n🎯 Ngưỡng đang xét: {current_threshold:,.0f} VND"
+                msg = f"💶 <b>Tỉ giá EUR hiện tại</b>\nGiá mua: <b>{rate:,.0f} VND</b>\nNgưỡng đang xét: {current_threshold:,.0f} VND"
             else:
                 msg = "❌ Không lấy được tỉ giá EUR lúc này."
             send_telegram_message(msg, chat_id)
@@ -89,20 +89,20 @@ def webhook():
             try:
                 new_thresh = float(parts[1])
                 current_threshold = new_thresh
-                send_telegram_message(f"✅ <b>Thành công</b>\nNgưỡng mới đã được đặt thành: <b>{current_threshold:,.0f} VND</b>", chat_id)
+                send_telegram_message(f"<b>Thành công</b>\nNgưỡng mới đã được đặt thành: <b>{current_threshold:,.0f} VND</b>", chat_id)
             except ValueError:
-                send_telegram_message("❌ Sai định dạng. Hãy gõ ví dụ: /threshold 27500", chat_id)
+                send_telegram_message("Sai định dạng. Hãy gõ ví dụ: /threshold 27500", chat_id)
         else:
-            send_telegram_message("❌ Thiếu giá trị. Hãy gõ ví dụ: /threshold 27500", chat_id)
+            send_telegram_message("Thiếu giá trị. Hãy gõ ví dụ: /threshold 27500", chat_id)
             
     elif text.startswith("/help") or text.startswith("/start"):
         help_msg = (
-            "🤖 <b>Bot Theo Dõi Tỉ Giá Euro - Hướng Dẫn</b>\n\n"
+            "<b>Bot Theo Dõi Tỉ Giá Euro - Hướng Dẫn</b>\n\n"
             "Các lệnh có sẵn:\n"
             "🔹 /check : Xem tỉ giá hiện tại\n"
             "🔹 /threshold &lt;số&gt; : Thay đổi ngưỡng cảnh báo (vd: /threshold 27000)\n"
             "🔹 /help : Xem lại tin nhắn này\n\n"
-            "Bot cũng sẽ tự động thông báo cho bạn mỗi 30 phút nếu tỉ giá giảm qua ngưỡng."
+            "Bot cũng sẽ tự động thông báo cho bạn mỗi 1 tiếng nếu tỉ giá giảm qua ngưỡng."
         )
         send_telegram_message(help_msg, chat_id)
         
@@ -124,11 +124,11 @@ def check_rate():
         
         if buy_rate < current_threshold:
             message = (
-                f"🚨 <b>THÔNG BÁO TỈ GIÁ EUR MỚI</b>\n"
+                f"<b>THÔNG BÁO TỈ GIÁ EUR MỚI</b>\n"
                 f"Tỉ giá mua vào đã giảm!\n\n"
-                f"📉 Giá hiện tại: <b>{buy_rate:,.0f} VND</b>\n"
-                f"🎯 Ngưỡng cũ: {current_threshold:,.0f} VND\n\n"
-                f"🔄 Đã tự động cập nhật ngưỡng mới thành {buy_rate:,.0f} VND."
+                f"- Giá hiện tại: <b>{buy_rate:,.0f} VND</b>\n"
+                f"- Ngưỡng cũ: {current_threshold:,.0f} VND\n\n"
+                f"Đã tự động cập nhật ngưỡng mới thành {buy_rate:,.0f} VND."
             )
             
             if send_telegram_message(message):
